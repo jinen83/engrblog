@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bouncing Balls with Pulley System</title>
+  <style>
+    canvas {
+      border: 2px solid #000;
+      display: block;
+      margin: 20px auto;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="bouncingCanvas" width="600" height="400"></canvas>
+  <script>
+    const canvas = document.getElementById("bouncingCanvas");
+    const ctx = canvas.getContext("2d");
+
+    // Divider properties
+    const divider = {
+      x: 300,
+      width: 10,
+      height: canvas.height / 2,
+      velocity: 2 // Divider motion speed
+    };
+
+    // Pulley system properties
+    const pulley = {
+      radius: 15,
+      x: divider.x + divider.width / 2,
+      y: divider.height,
+      loadHeight: 50, // Height of the load attached to the pulley
+      loadWidth: 30,
+      maxLift: canvas.height / 3 // Maximum height pulley can lift
+    };
+
+    // Balls array
+    const balls = [
+      { x: 100, y: 100, vx: 2, vy: 3, radius: 10, color: "#26bc6a" },
+      { x: 150, y: 200, vx: -3, vy: 2, radius: 10, color: "#ff5656" },
+      { x: 200, y: 150, vx: 2.5, vy: -2.5, radius: 10, color: "#f5ab00" },
+      { x: 250, y: 250, vx: -2.5, vy: -2, radius: 10, color: "#007bff" }
+    ];
+
+    function updateBall(ball) {
+      ball.x += ball.vx;
+      ball.y += ball.vy;
+
+      // Bounce off walls
+      if (ball.x - ball.radius < 0 || ball.x + ball.radius > divider.x) {
+        ball.vx = -ball.vx;
+      }
+      if (ball.y - ball.radius < 0 || ball.y + ball.radius > canvas.height) {
+        ball.vy = -ball.vy;
+      }
+    }
+
+    function updateDivider() {
+      // Move divider up and down
+      divider.height += divider.velocity;
+
+      // Reverse direction if divider hits canvas boundaries
+      if (divider.height <= 50 || divider.height >= canvas.height - 50) {
+        divider.velocity = -divider.velocity;
+      }
+
+      // Update pulley position to follow the divider
+      pulley.y = divider.height;
+    }
+
+    function drawBall(ball) {
+      ctx.beginPath();
+      ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
+      ctx.fillStyle = ball.color;
+      ctx.fill();
+      ctx.closePath();
+    }
+
+    function drawDivider() {
+      ctx.fillStyle = "#000";
+      ctx.fillRect(divider.x, 0, divider.width, divider.height);
+    }
+
+    function drawPulley() {
+      // Draw the pulley
+      ctx.beginPath();
+      ctx.arc(pulley.x, pulley.y, pulley.radius, 0, Math.PI * 2);
+      ctx.fillStyle = "#000";
+      ctx.fill();
+      ctx.closePath();
+
+      // Draw the cable and load
+      ctx.beginPath();
+      ctx.moveTo(pulley.x, pulley.y);
+      ctx.lineTo(pulley.x, pulley.y + pulley.maxLift);
+      ctx.strokeStyle = "#000";
+      ctx.stroke();
+
+      // Draw the load
+      ctx.fillStyle = "#555";
+      ctx.fillRect(
+        pulley.x - pulley.loadWidth / 2,
+        pulley.y + pulley.maxLift,
+        pulley.loadWidth,
+        pulley.loadHeight
+      );
+    }
+
+    function animate() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      balls.forEach(ball => {
+        updateBall(ball);
+        drawBall(ball);
+      });
+
+      updateDivider();
+      drawDivider();
+      drawPulley();
+
+      requestAnimationFrame(animate);
+    }
+
+    animate();
+  </script>
+</body>
+</html>
