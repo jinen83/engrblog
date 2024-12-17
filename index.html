@@ -3,150 +3,127 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pulley System</title>
+  <title>Bouncing Balls with Pulley System</title>
   <style>
-    body {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      background-color: #f5f5f5;
-      margin: 0;
-      overflow: hidden;
-    }
-
-    #box {
-      position: relative;
-      width: 600px;
-      height: 400px;
-      border: 2px solid black;
-      background-color: #fff;
-      overflow: hidden;
-    }
-
-    #divider {
-      position: absolute;
-      top: 50%;
-      left: 250px;
-      width: 10px;
-      height: 100%;
-      background-color: gray;
-      transform: translateY(-50%);
-    }
-
-    #pulley {
-      position: absolute;
-      top: 0;
-      right: 0;
-      width: 50px;
-      display: flex;
-      align-items: flex-start;
-      justify-content: center;
-    }
-
-    #rope {
-      position: absolute;
-      top: 0;
-      width: 2px;
-      background-color: black;
-      height: 100%;
-    }
-
-    #load {
-      position: absolute;
-      bottom: 0;
-      width: 30px;
-      height: 30px;
-      background-color: red;
-      border-radius: 50%;
-    }
-
-    .ball {
-      position: absolute;
-      width: 20px;
-      height: 20px;
-      background-color: blue;
-      border-radius: 50%;
-    }
-
-    #ball1 {
-      top: 20px;
-      left: 50px;
-      animation: moveBall 4s infinite alternate;
-    }
-
-    #ball2 {
-      top: 100px;
-      left: 120px;
-      animation: moveBall 3s infinite alternate;
-    }
-
-    #ball3 {
-      top: 200px;
-      left: 80px;
-      animation: moveBall 2.5s infinite alternate;
-    }
-
-    #ball4 {
-      top: 150px;
-      left: 30px;
-      animation: moveBall 3.5s infinite alternate;
-    }
-
-    @keyframes moveBall {
-      0%, 100% {
-        transform: translate(0, 0);
-      }
-      50% {
-        transform: translate(150px, 50px);
-      }
+    canvas {
+      border: 2px solid #000;
+      display: block;
+      margin: 20px auto;
     }
   </style>
 </head>
 <body>
-  <div id="box">
-    <div id="divider"></div>
-    <div id="pulley">
-      <div id="rope"></div>
-      <div id="load"></div>
-    </div>
-    <div class="ball" id="ball1"></div>
-    <div class="ball" id="ball2"></div>
-    <div class="ball" id="ball3"></div>
-    <div class="ball" id="ball4"></div>
-  </div>
-
+  <canvas id="bouncingCanvas" width="600" height="400"></canvas>
   <script>
-    const divider = document.getElementById("divider");
-    const pulley = document.getElementById("pulley");
-    const rope = document.getElementById("rope");
-    const load = document.getElementById("load");
+    const canvas = document.getElementById("bouncingCanvas");
+    const ctx = canvas.getContext("2d");
 
-    let direction = 1;
-    const dividerSpeed = 2;
-    const boxHeight = document.getElementById("box").clientHeight;
+    // Divider properties
+    const divider = {
+      x: 300,
+      width: 10,
+      height: canvas.height / 2,
+      velocity: 2 // Divider motion speed
+    };
 
-    function moveDivider() {
-      let top = parseFloat(getComputedStyle(divider).top);
-      if (top >= boxHeight - divider.offsetHeight || top <= 0) {
-        direction *= -1; // Reverse direction
+    // Pulley system properties
+    const pulley = {
+      radius: 15,
+      x: divider.x + divider.width / 2,
+      y: divider.height,
+      loadHeight: 50, // Height of the load attached to the pulley
+      loadWidth: 30,
+      maxLift: canvas.height / 3 // Maximum height pulley can lift
+    };
+
+    // Balls array
+    const balls = [
+      { x: 100, y: 100, vx: 2, vy: 3, radius: 10, color: "#26bc6a" },
+      { x: 150, y: 200, vx: -3, vy: 2, radius: 10, color: "#ff5656" },
+      { x: 200, y: 150, vx: 2.5, vy: -2.5, radius: 10, color: "#f5ab00" },
+      { x: 250, y: 250, vx: -2.5, vy: -2, radius: 10, color: "#007bff" }
+    ];
+
+    function updateBall(ball) {
+      ball.x += ball.vx;
+      ball.y += ball.vy;
+
+      // Bounce off walls
+      if (ball.x - ball.radius < 0 || ball.x + ball.radius > divider.x) {
+        ball.vx = -ball.vx;
       }
-      divider.style.top = `${top + direction * dividerSpeed}px`;
-
-      // Update pulley position
-      pulley.style.top = `${divider.offsetTop}px`;
-
-      // Update rope height
-      const ropeHeight = boxHeight - divider.offsetTop;
-      rope.style.height = `${ropeHeight}px`;
-
-      // Adjust load position
-      load.style.top = `${boxHeight - ropeHeight - load.offsetHeight}px`;
-
-      requestAnimationFrame(moveDivider);
+      if (ball.y - ball.radius < 0 || ball.y + ball.radius > canvas.height) {
+        ball.vy = -ball.vy;
+      }
     }
 
-    moveDivider();
+    function updateDivider() {
+      // Move divider up and down
+      divider.height += divider.velocity;
+
+      // Reverse direction if divider hits canvas boundaries
+      if (divider.height <= 50 || divider.height >= canvas.height - 50) {
+        divider.velocity = -divider.velocity;
+      }
+
+      // Update pulley position to follow the divider
+      pulley.y = divider.height;
+    }
+
+    function drawBall(ball) {
+      ctx.beginPath();
+      ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
+      ctx.fillStyle = ball.color;
+      ctx.fill();
+      ctx.closePath();
+    }
+
+    function drawDivider() {
+      ctx.fillStyle = "#000";
+      ctx.fillRect(divider.x, 0, divider.width, divider.height);
+    }
+
+    function drawPulley() {
+      // Draw the pulley
+      ctx.beginPath();
+      ctx.arc(pulley.x, pulley.y, pulley.radius, 0, Math.PI * 2);
+      ctx.fillStyle = "#000";
+      ctx.fill();
+      ctx.closePath();
+
+      // Draw the cable and load
+      ctx.beginPath();
+      ctx.moveTo(pulley.x, pulley.y);
+      ctx.lineTo(pulley.x, pulley.y + pulley.maxLift);
+      ctx.strokeStyle = "#000";
+      ctx.stroke();
+
+      // Draw the load
+      ctx.fillStyle = "#555";
+      ctx.fillRect(
+        pulley.x - pulley.loadWidth / 2,
+        pulley.y + pulley.maxLift,
+        pulley.loadWidth,
+        pulley.loadHeight
+      );
+    }
+
+    function animate() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      balls.forEach(ball => {
+        updateBall(ball);
+        drawBall(ball);
+      });
+
+      updateDivider();
+      drawDivider();
+      drawPulley();
+
+      requestAnimationFrame(animate);
+    }
+
+    animate();
   </script>
 </body>
 </html>
