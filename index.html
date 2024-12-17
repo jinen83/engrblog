@@ -3,127 +3,158 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Bouncing Balls with Pulley System</title>
+  <title>Flowchart Builder</title>
   <style>
-    canvas {
-      border: 2px solid #000;
-      display: block;
-      margin: 20px auto;
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+    }
+    #toolbox {
+      width: 20%;
+      height: 100vh;
+      background: #f4f4f4;
+      padding: 10px;
+      box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+      overflow-y: auto;
+    }
+    .tool {
+      margin: 10px 0;
+      padding: 10px;
+      background: #007bff;
+      color: white;
+      text-align: center;
+      border-radius: 5px;
+      cursor: grab;
+    }
+    #canvas {
+      width: 80%;
+      height: 100vh;
+      background: #ffffff;
+      position: absolute;
+      top: 0;
+      left: 20%;
+      border-left: 2px solid #ccc;
+      overflow: hidden;
+    }
+    .flow-node {
+      width: 100px;
+      height: 50px;
+      background: #007bff;
+      color: white;
+      position: absolute;
+      text-align: center;
+      line-height: 50px;
+      border-radius: 5px;
+      cursor: move;
+    }
+    .connector {
+      stroke: #007bff;
+      stroke-width: 2;
     }
   </style>
 </head>
 <body>
-  <canvas id="bouncingCanvas" width="600" height="400"></canvas>
-  <script>
-    const canvas = document.getElementById("bouncingCanvas");
-    const ctx = canvas.getContext("2d");
 
-    // Divider properties
-    const divider = {
-      x: 300,
-      width: 10,
-      height: canvas.height / 2,
-      velocity: 2 // Divider motion speed
-    };
+<!-- Toolbox Section -->
+<div id="toolbox">
+  <h3>Toolbox</h3>
+  <div class="tool" draggable="true" data-type="start">Start</div>
+  <div class="tool" draggable="true" data-type="process">Process</div>
+  <div class="tool" draggable="true" data-type="decision">Decision</div>
+  <div class="tool" draggable="true" data-type="end">End</div>
+</div>
 
-    // Pulley system properties
-    const pulley = {
-      radius: 15,
-      x: divider.x + divider.width / 2,
-      y: divider.height,
-      loadHeight: 50, // Height of the load attached to the pulley
-      loadWidth: 30,
-      maxLift: canvas.height / 3 // Maximum height pulley can lift
-    };
+<!-- Canvas Section -->
+<div id="canvas"></div>
 
-    // Balls array
-    const balls = [
-      { x: 100, y: 100, vx: 2, vy: 3, radius: 10, color: "#26bc6a" },
-      { x: 150, y: 200, vx: -3, vy: 2, radius: 10, color: "#ff5656" },
-      { x: 200, y: 150, vx: 2.5, vy: -2.5, radius: 10, color: "#f5ab00" },
-      { x: 250, y: 250, vx: -2.5, vy: -2, radius: 10, color: "#007bff" }
-    ];
+<script>
+  const toolbox = document.getElementById("toolbox");
+  const canvas = document.getElementById("canvas");
 
-    function updateBall(ball) {
-      ball.x += ball.vx;
-      ball.y += ball.vy;
+  // Store dragged element data
+  let draggedElement = null;
 
-      // Bounce off walls
-      if (ball.x - ball.radius < 0 || ball.x + ball.radius > divider.x) {
-        ball.vx = -ball.vx;
+  // Drag and Drop Events
+  toolbox.addEventListener("dragstart", (e) => {
+    if (e.target.classList.contains("tool")) {
+      draggedElement = e.target;
+    }
+  });
+
+  canvas.addEventListener("dragover", (e) => {
+    e.preventDefault();
+  });
+
+  canvas.addEventListener("drop", (e) => {
+    if (draggedElement) {
+      const type = draggedElement.getAttribute("data-type");
+      const newNode = document.createElement("div");
+      newNode.classList.add("flow-node");
+      newNode.style.top = `${e.clientY - canvas.offsetTop}px`;
+      newNode.style.left = `${e.clientX - canvas.offsetLeft}px`;
+      newNode.textContent = type.charAt(0).toUpperCase() + type.slice(1);
+      newNode.draggable = true;
+      newNode.addEventListener("dragstart", handleDragStart);
+      newNode.addEventListener("dragend", handleDragEnd);
+      canvas.appendChild(newNode);
+    }
+  });
+
+  let draggedNode = null;
+
+  function handleDragStart(e) {
+    draggedNode = e.target;
+  }
+
+  function handleDragEnd(e) {
+    if (draggedNode) {
+      draggedNode.style.top = `${e.clientY - canvas.offsetTop}px`;
+      draggedNode.style.left = `${e.clientX - canvas.offsetLeft}px`;
+      draggedNode = null;
+    }
+  }
+
+  // Allow connectors between nodes
+  let connecting = false;
+  let startNode = null;
+
+  canvas.addEventListener("click", (e) => {
+    if (e.target.classList.contains("flow-node")) {
+      if (!connecting) {
+        startNode = e.target;
+        connecting = true;
+        startNode.style.border = "2px solid #ff5722";
+      } else {
+        const endNode = e.target;
+        if (startNode !== endNode) {
+          createConnector(startNode, endNode);
+        }
+        startNode.style.border = "none";
+        connecting = false;
+        startNode = null;
       }
-      if (ball.y - ball.radius < 0 || ball.y + ball.radius > canvas.height) {
-        ball.vy = -ball.vy;
-      }
     }
+  });
 
-    function updateDivider() {
-      // Move divider up and down
-      divider.height += divider.velocity;
+  function createConnector(startNode, endNode) {
+    const startRect = startNode.getBoundingClientRect();
+    const endRect = endNode.getBoundingClientRect();
+    const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    svg.style.position = "absolute";
+    svg.style.top = "0";
+    svg.style.left = "0";
+    svg.style.width = "100%";
+    svg.style.height = "100%";
+    const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+    line.classList.add("connector");
+    line.setAttribute("x1", startRect.left + startRect.width / 2 - canvas.offsetLeft);
+    line.setAttribute("y1", startRect.top + startRect.height / 2 - canvas.offsetTop);
+    line.setAttribute("x2", endRect.left + endRect.width / 2 - canvas.offsetLeft);
+    line.setAttribute("y2", endRect.top + endRect.height / 2 - canvas.offsetTop);
+    svg.appendChild(line);
+    canvas.appendChild(svg);
+  }
+</script>
 
-      // Reverse direction if divider hits canvas boundaries
-      if (divider.height <= 50 || divider.height >= canvas.height - 50) {
-        divider.velocity = -divider.velocity;
-      }
-
-      // Update pulley position to follow the divider
-      pulley.y = divider.height;
-    }
-
-    function drawBall(ball) {
-      ctx.beginPath();
-      ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
-      ctx.fillStyle = ball.color;
-      ctx.fill();
-      ctx.closePath();
-    }
-
-    function drawDivider() {
-      ctx.fillStyle = "#000";
-      ctx.fillRect(divider.x, 0, divider.width, divider.height);
-    }
-
-    function drawPulley() {
-      // Draw the pulley
-      ctx.beginPath();
-      ctx.arc(pulley.x, pulley.y, pulley.radius, 0, Math.PI * 2);
-      ctx.fillStyle = "#000";
-      ctx.fill();
-      ctx.closePath();
-
-      // Draw the cable and load
-      ctx.beginPath();
-      ctx.moveTo(pulley.x, pulley.y);
-      ctx.lineTo(pulley.x, pulley.y + pulley.maxLift);
-      ctx.strokeStyle = "#000";
-      ctx.stroke();
-
-      // Draw the load
-      ctx.fillStyle = "#555";
-      ctx.fillRect(
-        pulley.x - pulley.loadWidth / 2,
-        pulley.y + pulley.maxLift,
-        pulley.loadWidth,
-        pulley.loadHeight
-      );
-    }
-
-    function animate() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-      balls.forEach(ball => {
-        updateBall(ball);
-        drawBall(ball);
-      });
-
-      updateDivider();
-      drawDivider();
-      drawPulley();
-
-      requestAnimationFrame(animate);
-    }
-
-    animate();
-  </script>
 </body>
 </html>
