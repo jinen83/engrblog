@@ -3,158 +3,212 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Flowchart Builder</title>
+  <title>From Growth to Gridlock: Internal Software Becomes a Development Nightmare</title>
   <style>
     body {
+      font-family: 'Montserrat', sans-serif;
       margin: 0;
-      font-family: Arial, sans-serif;
+      padding: 0;
+      line-height: 1.6;
+      color: #333;
+      background-color: #f9f9f9;
+      transition: background-color 0.3s, color 0.3s;
     }
-    #toolbox {
-      width: 20%;
-      height: 100vh;
-      background: #f4f4f4;
-      padding: 10px;
-      box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
-      overflow-y: auto;
+
+    .dark-mode {
+      background-color: #121212;
+      color: #e0e0e0;
     }
-    .tool {
+
+    .container {
+      max-width: 800px;
+      margin: 20px auto;
+      padding: 20px;
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      transition: background-color 0.3s;
+    }
+
+    .dark-mode .container {
+      background: #1e1e1e;
+    }
+
+    h1 {
+      color: #333;
+      text-align: center;
+      background: linear-gradient(to right, #4facfe, #00f2fe);
+      color: white;
+      padding: 20px;
+      border-radius: 8px;
+      transition: background 0.3s;
+    }
+
+    .dark-mode h1 {
+      background: linear-gradient(to right, #333333, #dd1818);
+    }
+
+    h2, h3 {
+      color: #555;
+    }
+
+    .dark-mode h2, .dark-mode h3 {
+      color: #bbb;
+    }
+
+    p {
       margin: 10px 0;
+    }
+
+    .dark-mode p {
+      color: #ccc;
+    }
+
+    iframe {
+      width: 100%;
+      height: 400px;
+      border: none;
+      margin-top: 20px;
+    }
+
+    pre {
+      background: #eef;
       padding: 10px;
-      background: #007bff;
-      color: white;
-      text-align: center;
       border-radius: 5px;
-      cursor: grab;
+      overflow-x: auto;
+      transition: background-color 0.3s, color 0.3s;
     }
-    #canvas {
-      width: 80%;
-      height: 100vh;
-      background: #ffffff;
-      position: absolute;
-      top: 0;
-      left: 20%;
-      border-left: 2px solid #ccc;
-      overflow: hidden;
+
+    .dark-mode pre {
+      background: #333;
+      color: #ddd;
     }
-    .flow-node {
-      width: 100px;
-      height: 50px;
-      background: #007bff;
+
+    .hero {
+      background: linear-gradient(to right, #4facfe, #00f2fe);
       color: white;
-      position: absolute;
+      padding: 60px 20px;
       text-align: center;
-      line-height: 50px;
-      border-radius: 5px;
-      cursor: move;
     }
-    .connector {
-      stroke: #007bff;
-      stroke-width: 2;
+
+    .dark-mode .hero {
+      background: linear-gradient(to right, #333333, #dd1818);
     }
+
+    .hero h1 {
+      font-size: 2.5em;
+      margin: 0;
+    }
+
+    .dark-mode-toggle {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 1.5em;
+      color: #007BFF;
+    }
+
+    .dark-mode .dark-mode-toggle {
+      color: #ffd700;
+    }
+
+    .dark-mode-toggle:hover {
+      opacity: 0.8;
+    }
+    .a1 {
+  width: 100%;
+  height: 700px; /* Adjust height as needed */
+  border: none;
+  margin-top: 20px;
+}
   </style>
 </head>
 <body>
+  <div class="hero">
+    <h1>From Growth to Gridlock: Internal Software Becomes a Development Nightmare</h1>
+  </div>
 
-<!-- Toolbox Section -->
-<div id="toolbox">
-  <h3>Toolbox</h3>
-  <div class="tool" draggable="true" data-type="start">Start</div>
-  <div class="tool" draggable="true" data-type="process">Process</div>
-  <div class="tool" draggable="true" data-type="decision">Decision</div>
-  <div class="tool" draggable="true" data-type="end">End</div>
-</div>
+  <button class="dark-mode-toggle" onclick="toggleDarkMode()">☾</button>
 
-<!-- Canvas Section -->
-<div id="canvas"></div>
+  <div class="container">
+    <p>
+      A study by industry experts reveals that over <strong>70% of internal software</strong> solutions in fast-growing companies are either abandoned or significantly reworked within five years. The rapid pace of development and scaling often leaves teams grappling with tools that can no longer support evolving business needs.
+    </p>
 
-<script>
-  const toolbox = document.getElementById("toolbox");
-  const canvas = document.getElementById("canvas");
+    <p>
+      This phenomenon stems from the initial simplicity of internal tools, which quickly turns into a tangle of complexities as features pile up and requirements shift. Let’s delve into how internal software grows to become a development nightmare.
+    </p>
 
-  // Store dragged element data
-  let draggedElement = null;
+    <h2>Why Complexity Grows</h2>
+    <p>
+      Every line of code added to a system interacts with the existing codebase. With each new feature
+      or change, developers must consider the impact on other parts of the system. Over time, the
+      interdependencies within the codebase grow, making it more challenging to understand and modify.
+    </p>
 
-  // Drag and Drop Events
-  toolbox.addEventListener("dragstart", (e) => {
-    if (e.target.classList.contains("tool")) {
-      draggedElement = e.target;
+    <h2>Impact on Development </h2>
+    <p>
+      As complexity increases, so does the time required to implement changes. Developers need more
+      time to understand the existing system, account for potential side effects, and thoroughly
+      test their changes. This creates a feedback loop: complexity grows, making changes slower, which
+      in turn makes the codebase more complex as workarounds and quick fixes accumulate.
+    </p>
+
+   
+
+    <iframe src="https://jinen83.github.io/engrblogcomplexity/" title="Software Complexity Visualization"></iframe>
+    
+<h2> Modern day software building and problems in context to internal software </h2>
+
+<p>
+ Today software leaders are converging on using tech stack that are universally popular:
+ 
+ <li> <b>Frontend</b>: React/Angular/Vue</li>
+ <li> <b>Backend</b>: Node/Django/ etc </li>
+  <li> <b>Database</b>: SQL/NoSql </li>
+  <br>
+  Essentially that is a framework driven approach. It is super easy to get started but with time you will start having to bother about the pain of framework upgrades to keep using the latest components & then managing dependencies and libraries.
+  
+  In a simple back of the envelope cost benefit analysis -- this approach will still be worth for your customer facing software but it starts failing for internal software. You end up embracing problems like:
+  <br>
+  <li> Inconsistent usage of frontend components across all your internal tools </li>
+  <li> Wasting your engineers time on maintaining frameworks across all of the internal software </li>
+  <li> Maintenance of these tools further leads to context switching and spending your engineers time to read old code and then start working on it. </li>
+
+
+
+</p>
+
+    <h2>New Approach: Using Low-Code Tools for Internal Tools</h2>
+    <p>
+      Low-code platforms designed for internal tools offer a transformative approach to managing software complexity. These platforms allow teams to build and iterate on tools with minimal coding, reducing the time and resources required to maintain and scale software systems. 
+    </p>
+    <h3>How Low-Code Platforms Work</h3>
+    <h4>1. Frontend Interface</h4>
+    <p>
+      Low-code platforms provide a drag-and-drop builder for creating frontend interfaces. This intuitive tool allows developers and non-developers alike to design user-friendly interfaces quickly and efficiently. 
+        <iframe class="a1" src="https://jinen83.github.io/dragdropSimul/" title="Software Complexity Visualization"></iframe>
+    </p>
+    <h4>2. Event Flow Builder</h4>
+    <p>
+      An event flow builder enables teams to define the logic and workflows that power their applications. It offers a visual way to connect actions, triggers, and responses, streamlining the development process.
+    </p>
+    <h4>3. Connector Module</h4>
+    <p>
+      Low-code platforms include a connector module to integrate with various data sources, such as APIs, databases, and third-party services. This ensures seamless data connectivity and allows applications to interact with the necessary systems effortlessly.
+    </p>
+    <p>
+      By leveraging these components, low-code platforms simplify the complexities of application development and enable organizations to adapt quickly to evolving business needs.
+    </p>
+  </div>
+
+  <script>
+    function toggleDarkMode() {
+      document.body.classList.toggle('dark-mode');
     }
-  });
-
-  canvas.addEventListener("dragover", (e) => {
-    e.preventDefault();
-  });
-
-  canvas.addEventListener("drop", (e) => {
-    if (draggedElement) {
-      const type = draggedElement.getAttribute("data-type");
-      const newNode = document.createElement("div");
-      newNode.classList.add("flow-node");
-      newNode.style.top = `${e.clientY - canvas.offsetTop}px`;
-      newNode.style.left = `${e.clientX - canvas.offsetLeft}px`;
-      newNode.textContent = type.charAt(0).toUpperCase() + type.slice(1);
-      newNode.draggable = true;
-      newNode.addEventListener("dragstart", handleDragStart);
-      newNode.addEventListener("dragend", handleDragEnd);
-      canvas.appendChild(newNode);
-    }
-  });
-
-  let draggedNode = null;
-
-  function handleDragStart(e) {
-    draggedNode = e.target;
-  }
-
-  function handleDragEnd(e) {
-    if (draggedNode) {
-      draggedNode.style.top = `${e.clientY - canvas.offsetTop}px`;
-      draggedNode.style.left = `${e.clientX - canvas.offsetLeft}px`;
-      draggedNode = null;
-    }
-  }
-
-  // Allow connectors between nodes
-  let connecting = false;
-  let startNode = null;
-
-  canvas.addEventListener("click", (e) => {
-    if (e.target.classList.contains("flow-node")) {
-      if (!connecting) {
-        startNode = e.target;
-        connecting = true;
-        startNode.style.border = "2px solid #ff5722";
-      } else {
-        const endNode = e.target;
-        if (startNode !== endNode) {
-          createConnector(startNode, endNode);
-        }
-        startNode.style.border = "none";
-        connecting = false;
-        startNode = null;
-      }
-    }
-  });
-
-  function createConnector(startNode, endNode) {
-    const startRect = startNode.getBoundingClientRect();
-    const endRect = endNode.getBoundingClientRect();
-    const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-    svg.style.position = "absolute";
-    svg.style.top = "0";
-    svg.style.left = "0";
-    svg.style.width = "100%";
-    svg.style.height = "100%";
-    const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
-    line.classList.add("connector");
-    line.setAttribute("x1", startRect.left + startRect.width / 2 - canvas.offsetLeft);
-    line.setAttribute("y1", startRect.top + startRect.height / 2 - canvas.offsetTop);
-    line.setAttribute("x2", endRect.left + endRect.width / 2 - canvas.offsetLeft);
-    line.setAttribute("y2", endRect.top + endRect.height / 2 - canvas.offsetTop);
-    svg.appendChild(line);
-    canvas.appendChild(svg);
-  }
-</script>
-
+  </script>
 </body>
 </html>
