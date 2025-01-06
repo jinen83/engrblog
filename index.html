@@ -10,8 +10,8 @@
       margin: 0;
       padding: 0;
       line-height: 1.6;
-      color: #333;
-      background-color: #f9f9f9;
+      color: #e0e0e0;
+      background-color: #121212;
       transition: background-color 0.3s, color 0.3s;
     }
 
@@ -24,43 +24,28 @@
       max-width: 800px;
       margin: 20px auto;
       padding: 20px;
-      background: #fff;
+      background: #1e1e1e;
       border-radius: 8px;
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
       transition: background-color 0.3s;
     }
 
-    .dark-mode .container {
-      background: #1e1e1e;
-    }
-
     h1 {
-      color: #333;
+      color: #fff;
       text-align: center;
-      background: linear-gradient(to right, #4facfe, #00f2fe);
+      background: linear-gradient(to right, #333333, #dd1818);
       color: white;
       padding: 20px;
       border-radius: 8px;
       transition: background 0.3s;
     }
 
-    .dark-mode h1 {
-      background: linear-gradient(to right, #333333, #dd1818);
-    }
-
     h2, h3 {
-      color: #555;
-    }
-
-    .dark-mode h2, .dark-mode h3 {
       color: #bbb;
     }
 
     p {
       margin: 10px 0;
-    }
-
-    .dark-mode p {
       color: #ccc;
     }
 
@@ -72,27 +57,21 @@
     }
 
     pre {
-      background: #eef;
+      background: #333;
       padding: 10px;
       border-radius: 5px;
       overflow-x: auto;
-      transition: background-color 0.3s, color 0.3s;
-    }
-
-    .dark-mode pre {
-      background: #333;
       color: #ddd;
     }
 
     .hero {
-      background: linear-gradient(to right, #4facfe, #00f2fe);
+      background: linear-gradient(to right, #333333, #dd1818);
       color: white;
       padding: 60px 20px;
       text-align: center;
-    }
-
-    .dark-mode .hero {
-      background: linear-gradient(to right, #333333, #dd1818);
+      max-width: 800px;
+      margin: 0 auto 20px auto; /* Align with container */
+      border-radius: 8px;
     }
 
     .hero h1 {
@@ -108,26 +87,22 @@
       border: none;
       cursor: pointer;
       font-size: 1.5em;
-      color: #007BFF;
-    }
-
-    .dark-mode .dark-mode-toggle {
       color: #ffd700;
     }
 
     .dark-mode-toggle:hover {
       opacity: 0.8;
     }
+
     .a1 {
-  width: 100%;
-  height: 700px; /* Adjust height as needed */
-  border: none;
-  margin-top: 20px;
-}
+      width: 100%;
+      height: 700px; /* Adjust height as needed */
+      border: none;
+      margin-top: 20px;
+    }
   </style>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </head>
-<body>
+<body class="dark-mode">
   <div class="hero">
     <h1>From Growth to Gridlock: Internal Software Becomes a Development Nightmare</h1>
   </div>
@@ -150,7 +125,7 @@
       interdependencies within the codebase grow, making it more challenging to understand and modify.
     </p>
 
-    <h2>Impact on Development </h2>
+    <h2>Impact on Development</h2>
     <p>
       As complexity increases, so does the time required to implement changes. Developers need more
       time to understand the existing system, account for potential side effects, and thoroughly
@@ -158,43 +133,29 @@
       in turn makes the codebase more complex as workarounds and quick fixes accumulate.
     </p>
 
-   
-
     <iframe src="https://jinen83.github.io/engrblogcomplexity/" title="Software Complexity Visualization"></iframe>
     
-<h2> Modern day software building and problems in context to internal software </h2>
+    <h2>Modern Day Software Building and Problems in Context to Internal Software</h2>
 
- <p>
-        Today software leaders are converging on using tech stacks that are universally popular:
+    <p>
+      Today software leaders are converging on using tech stack that are universally popular:
     </p>
     <ul>
-        <li><b>Frontend</b>: React/Angular/Vue</li>
-        <li><b>Backend</b>: Node/Django/etc</li>
-        <li><b>Database</b>: SQL/NoSQL</li>
+      <li><b>Frontend</b>: React/Angular/Vue</li>
+      <li><b>Backend</b>: Node/Django/ etc</li>
+      <li><b>Database</b>: SQL/NoSQL</li>
     </ul>
     <p>
-        Essentially, this is a framework-driven approach. It is super easy to get started, but over time you will start facing the compounded pain of framework upgrades to keep using the latest components and managing dependencies and libraries.
+      Essentially that is a framework-driven approach. It is super easy to get started but with time you will start having to bother about the pain of framework upgrades to keep using the latest components & then managing dependencies and libraries.
     </p>
     <p>
-        In a simple back-of-the-envelope cost-benefit analysis, this approach may still be worth it for your customer-facing software, but it starts failing for internal software. You end up embracing problems like:
+      In a simple back-of-the-envelope cost-benefit analysis — this approach will still be worth it for your customer-facing software but it starts failing for internal software. You end up embracing problems like:
     </p>
     <ul>
-        <li>Inconsistent usage of frontend components across all your internal tools</li>
-        <li>Wasting your engineers' time on maintaining frameworks across all internal software</li>
-        <li>Maintenance of these tools further leads to context switching and spending your engineers' time reading old code before starting to work on it.</li>
+      <li>Inconsistent usage of frontend components across all your internal tools.</li>
+      <li>Wasting your engineers' time on maintaining frameworks across all of the internal software.</li>
+      <li>Maintenance of these tools further leads to context switching and spending your engineers' time to read old code and then start working on it.</li>
     </ul>
-    <p>
-        This inefficiency can be modeled as a compounded pain factor, \( P \), where:
-    </p>
-    <p>
-        \[
-        P = \sum_{i=1}^{n} \left[ (U_i \cdot M_i) + W_i \cdot \left( 1 + \frac{d}{T_i} \right) \right]
-        \]
-    </p>
-    <p>
-        Here, \( U_i \) is the effort for framework upgrades, \( M_i \) is the maintenance cost, \( W_i \) is the bandwidth wasted, \( d \) is the codebase drift factor, and \( T_i \) is the technical debt reduction effort. This formula highlights how the pain compounds across multiple tools and shows why this approach becomes unsustainable for internal software as the number of tools increases.
-    </p>
-
 
     <h2>New Approach: Using Low-Code Tools for Internal Tools</h2>
     <p>
@@ -203,9 +164,9 @@
     <h3>How Low-Code Platforms Work</h3>
     <h4>1. Frontend Interface</h4>
     <p>
-      Low-code platforms provide a drag-and-drop builder for creating frontend interfaces. They offer a built in 100's of frontend components that you need for your Ui interface. Immediate benefits of this abstraction: <br> <li>Takes away the hard & time consuming decision making of choosing an appropriate frontend component</li> <li> Brings in consistency of Ui developed </li> <li> Takes away the worry of underlying framework and framework upgrades (it gets outsourced to the provider of the tool)</li> <li> This WYSIWYG intuitive tool allows backend engineers, semi skilled frontend developers and non-developers alike to design user-friendly interfaces quickly and efficiently</li>
-        <iframe class="a1" src="https://jinen83.github.io/dragdropSimul/" title="Software Complexity Visualization"></iframe>
+      Low-code platforms provide a drag-and-drop builder for creating frontend interfaces. This intuitive tool allows developers and non-developers alike to design user-friendly interfaces quickly and efficiently. 
     </p>
+    <iframe class="a1" src="https://jinen83.github.io/dragdropSimul/" title="Drag and Drop Simulation"></iframe>
     <h4>2. Event Flow Builder</h4>
     <p>
       An event flow builder enables teams to define the logic and workflows that power their applications. It offers a visual way to connect actions, triggers, and responses, streamlining the development process.
