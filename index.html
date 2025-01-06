@@ -125,6 +125,7 @@
   margin-top: 20px;
 }
   </style>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </head>
 <body>
   <div class="hero">
@@ -163,24 +164,37 @@
     
 <h2> Modern day software building and problems in context to internal software </h2>
 
-<p>
- Today software leaders are converging on using tech stack that are universally popular:
- 
- <li> <b>Frontend</b>: React/Angular/Vue</li>
- <li> <b>Backend</b>: Node/Django/ etc </li>
-  <li> <b>Database</b>: SQL/NoSql </li>
-  <br>
-  Essentially that is a framework driven approach. It is super easy to get started but with time you will start having to bother about the pain of framework upgrades to keep using the latest components & then managing dependencies and libraries.
-  
-  In a simple back of the envelope cost benefit analysis -- this approach will still be worth for your customer facing software but it starts failing for internal software. You end up embracing problems like:
-  <br>
-  <li> Inconsistent usage of frontend components across all your internal tools </li>
-  <li> Wasting your engineers time on maintaining frameworks across all of the internal software </li>
-  <li> Maintenance of these tools further leads to context switching and spending your engineers time to read old code and then start working on it. </li>
+ <p>
+        Today software leaders are converging on using tech stacks that are universally popular:
+    </p>
+    <ul>
+        <li><b>Frontend</b>: React/Angular/Vue</li>
+        <li><b>Backend</b>: Node/Django/etc</li>
+        <li><b>Database</b>: SQL/NoSQL</li>
+    </ul>
+    <p>
+        Essentially, this is a framework-driven approach. It is super easy to get started, but over time you will start facing the compounded pain of framework upgrades to keep using the latest components and managing dependencies and libraries.
+    </p>
+    <p>
+        In a simple back-of-the-envelope cost-benefit analysis, this approach may still be worth it for your customer-facing software, but it starts failing for internal software. You end up embracing problems like:
+    </p>
+    <ul>
+        <li>Inconsistent usage of frontend components across all your internal tools</li>
+        <li>Wasting your engineers' time on maintaining frameworks across all internal software</li>
+        <li>Maintenance of these tools further leads to context switching and spending your engineers' time reading old code before starting to work on it.</li>
+    </ul>
+    <p>
+        This inefficiency can be modeled as a compounded pain factor, \( P \), where:
+    </p>
+    <p>
+        \[
+        P = \sum_{i=1}^{n} \left[ (U_i \cdot M_i) + W_i \cdot \left( 1 + \frac{d}{T_i} \right) \right]
+        \]
+    </p>
+    <p>
+        Here, \( U_i \) is the effort for framework upgrades, \( M_i \) is the maintenance cost, \( W_i \) is the bandwidth wasted, \( d \) is the codebase drift factor, and \( T_i \) is the technical debt reduction effort. This formula highlights how the pain compounds across multiple tools and shows why this approach becomes unsustainable for internal software as the number of tools increases.
+    </p>
 
-
-
-</p>
 
     <h2>New Approach: Using Low-Code Tools for Internal Tools</h2>
     <p>
